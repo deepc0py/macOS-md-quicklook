@@ -109,7 +109,8 @@ spawn any web processes at all.
   ahead of time inside the extension.
 - Images referenced by relative path don't load: QuickLook's sandbox
   grants the extension access to the previewed file only. Remote images
-  are also blocked (no network entitlement) — deliberately.
+  (including tracking pixels) are blocked by a Content-Security-Policy
+  baked into every page — only `data:` URI images render. Deliberate.
 - `qlmanage -p` does not host third-party preview extensions on modern
   macOS; test with Finder or the companion app instead.
 - Jira markup without a header row renders its tables as plain rows —

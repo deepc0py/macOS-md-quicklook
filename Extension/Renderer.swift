@@ -98,8 +98,14 @@ final class Renderer {
             + "@media (prefers-color-scheme: light){\n" + (try read("vendor/hljs-github.min.css")) + "\n}"
             + "@media (prefers-color-scheme: dark){\n" + (try read("vendor/hljs-github-dark.min.css")) + "\n}"
             + (try read("style.css"))
+        // CSP makes the no-phone-home guarantee hold in the *display* process
+        // too: even if QuickLook's HTML view has network access, documents
+        // cannot fetch remote images, styles, or scripts. Embedded data: URI
+        // images keep working.
         pageHeader = """
             <!DOCTYPE html><html><head><meta charset="utf-8">\
+            <meta http-equiv="Content-Security-Policy" \
+            content="default-src 'none'; style-src 'unsafe-inline'; img-src data:;">\
             <meta name="color-scheme" content="light dark"><style>
             \(style)
             </style></head><body><article class="markdown-body">
