@@ -1,0 +1,88 @@
+name: MarkdownQuickLook
+options:
+  bundleIdPrefix: com.deepc0py
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.10"
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "-"
+    DEVELOPMENT_TEAM: ""
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+
+targets:
+  MarkdownQuickLook:
+    type: application
+    platform: macOS
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    sources:
+      - App
+      - path: Samples/Sample.md
+        buildPhase: resources
+    dependencies:
+      - target: PreviewExtension
+        embed: true
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Markdown QuickLook
+        LSApplicationCategoryType: public.app-category.developer-tools
+        NSHumanReadableCopyright: MIT License
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: Markdown Document
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes: [net.daringfireball.markdown]
+          - CFBundleTypeName: Jira Wiki Markup
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Owner
+            LSItemContentTypes: [com.deepc0py.jira-wiki]
+        UTImportedTypeDeclarations:
+          - UTTypeIdentifier: net.daringfireball.markdown
+            UTTypeDescription: Markdown Document
+            UTTypeConformsTo: [public.plain-text]
+            UTTypeTagSpecification:
+              public.filename-extension:
+                [md, markdown, mdown, mkdn, mkd, mdwn, mdtxt, mdtext, mdx, rmd, qmd]
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: com.deepc0py.jira-wiki
+            UTTypeDescription: Jira Wiki Markup
+            UTTypeConformsTo: [public.plain-text]
+            UTTypeTagSpecification:
+              public.filename-extension: [jira, confluence]
+    entitlements:
+      path: App/App.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.files.user-selected.read-only: true
+
+  PreviewExtension:
+    type: app-extension
+    platform: macOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.deepc0py.MarkdownQuickLook.PreviewExtension
+    sources:
+      - Extension
+    info:
+      path: Extension/Info.plist
+      properties:
+        CFBundleDisplayName: Markdown QuickLook Preview
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.quicklook.preview
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PreviewViewController
+          NSExtensionAttributes:
+            QLSupportedContentTypes:
+              - net.daringfireball.markdown
+              - com.deepc0py.jira-wiki
+            QLSupportsSearchableItems: false
+    entitlements:
+      path: Extension/Extension.entitlements
+      properties:
+        com.apple.security.app-sandbox: true

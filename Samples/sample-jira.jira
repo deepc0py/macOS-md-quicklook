@@ -1,0 +1,40 @@
+h1. Spike: payment retry queue
+
+*Owner:* [~jesse] | *Status:* +in review+ | ??ops weekly??
+
+h2. Problem
+
+The retry worker drops jobs when the broker restarts. See
+[the incident doc|https://example.com/incident-42] and {{RetryWorker.scala}}.
+
+bq. Any failure during requeue loses the message permanently.
+
+h2. Findings
+
+||Attempt||Outcome||Latency||
+|1|-lost-|n/a|
+|2|acknowledged|120ms|
+|3|acknowledged|95ms|
+
+* Broker acks before persistence
+** This is the root cause
+* Consumer prefetch is set to 500
+# Reduce prefetch to 50
+# Persist before ack
+# Replay from the dead-letter queue
+
+h2. Proposed fix
+
+{code:scala}
+def requeue(job: Job): IO[Unit] =
+  store.persist(job) *> broker.ack(job.id)
+{code}
+
+{quote}
+Persist first, ack second. The window closes entirely.
+{quote}
+
+{color:red}Do not ship without the migration.{color} More detail in the
+{noformat}
+raw broker logs: 2026-07-01T04:12:00Z requeue failed (channel closed)
+{noformat}
