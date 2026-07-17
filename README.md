@@ -1,9 +1,12 @@
 # macOS-md-quicklook
 
-Styled QuickLook previews for Markdown — press Space on a `.md` file in
-Finder and read it rendered, not as plain text. Built for macOS Tahoe 26
-as a native Quick Look preview extension. Fully offline, ad-hoc signed,
-no App Store, no third-party binaries: `git clone && make install`.
+A Markdown viewer for Quick Look — press Space on a `.md` file in Finder
+and read it rendered, not as plain text. A native QuickLook preview
+extension built and tested on macOS Tahoe 26 (deployment target
+macOS 14+). Fully offline, sandboxed, ad-hoc signed, no App Store, no
+third-party binaries: `git clone && make install`. An open-source
+alternative to Peek or QLMarkdown for machines where you can't install
+either — corporate IT can read every line it ships.
 
 | GitHub-flavored Markdown | Jira wiki markup |
 | --- | --- |
