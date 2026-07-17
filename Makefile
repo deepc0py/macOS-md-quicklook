@@ -36,5 +36,18 @@ uninstall:
 test-jira:
 	node -e 'global.window={};const fs=require("fs");eval(fs.readFileSync("Extension/Resources/jira.js","utf8"));const J=global.window.JiraMarkup;const s=fs.readFileSync("Samples/sample-jira.jira","utf8");if(!J.shouldConvert(s,"jira"))throw new Error("jira not detected");const md=J.toMarkdown(s);for(const want of["# Spike","## Problem","| --- |","```scala","> Persist first","~~lost~~"]){if(!md.includes(want))throw new Error("missing: "+want)}console.log("jira converter OK")'
 
+# Full pipeline check: runs the extension's exact JavaScriptCore renderer
+# (Renderer.swift + bundled JS) against both samples.
+test-render:
+	mkdir -p build
+	swiftc -O Extension/Renderer.swift scripts/render-cli/main.swift -o build/render-cli
+	build/render-cli Extension/Resources Samples/Sample.md /tmp/render-sample.html
+	build/render-cli Extension/Resources Samples/sample-jira.jira /tmp/render-jira.html
+	@grep -q "language-swift" /tmp/render-sample.html && \
+	 grep -q "front-matter" /tmp/render-sample.html && \
+	 grep -q "class=\"hljs language-scala\"" /tmp/render-jira.html && \
+	 grep -q "jira-badge" /tmp/render-jira.html && \
+	 echo "render pipeline OK"
+
 clean:
 	rm -rf build $(APP).xcodeproj

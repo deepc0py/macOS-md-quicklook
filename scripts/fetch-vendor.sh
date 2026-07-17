@@ -32,7 +32,4 @@ done
 # GitHub look-and-feel (auto light/dark)
 fetch https://cdn.jsdelivr.net/npm/github-markdown-css@5.8.1/github-markdown.css                     github-markdown.css
 
-# Diagrams
-fetch https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js                                mermaid.min.js
-
 (cd "$DEST" && rm -f SHA256SUMS && shasum -a 256 -- * | tee SHA256SUMS)

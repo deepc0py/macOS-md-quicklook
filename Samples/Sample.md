@@ -49,6 +49,9 @@ func preview(_ url: URL) async throws -> Preview {
 
 ## Diagrams
 
+Mermaid fences are kept as labeled source — QuickLook previews run no
+scripts, so the diagram below is readable but not drawn:
+
 ```mermaid
 flowchart LR
     Finder -- spacebar --> QL[QuickLook]

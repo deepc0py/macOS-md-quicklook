@@ -69,15 +69,21 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.deepc0py.MarkdownQuickLook.PreviewExtension
     sources:
-      - Extension
+      - path: Extension
+        excludes:
+          - "Resources/vendor/**"
+      - path: Extension/Resources/vendor
+        type: folder
+        buildPhase: resources
     info:
       path: Extension/Info.plist
       properties:
         CFBundleDisplayName: Markdown QuickLook Preview
         NSExtension:
           NSExtensionPointIdentifier: com.apple.quicklook.preview
-          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PreviewViewController
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PreviewProvider
           NSExtensionAttributes:
+            QLIsDataBasedPreview: true
             QLSupportedContentTypes:
               - net.daringfireball.markdown
               - com.deepc0py.jira-wiki

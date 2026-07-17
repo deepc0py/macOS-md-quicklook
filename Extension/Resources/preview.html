@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<!-- Browser dev harness for the renderer core. The extension itself runs
+     render.js inside JavaScriptCore and serves static HTML to QuickLook;
+     this page exists so the pipeline can be exercised in a browser. -->
 <html>
 <head>
 <meta charset="utf-8">
@@ -12,7 +15,6 @@
 <script src="vendor/markdown-it-task-lists.min.js"></script>
 <script src="vendor/markdown-it-emoji.min.js"></script>
 <script src="vendor/highlight.min.js"></script>
-<script src="vendor/mermaid.min.js"></script>
 <script src="vendor/hljs-scala.min.js"></script>
 <script src="vendor/hljs-dockerfile.min.js"></script>
 <script src="vendor/hljs-powershell.min.js"></script>
@@ -26,7 +28,13 @@
 <script src="vendor/hljs-julia.min.js"></script>
 <script src="vendor/hljs-nginx.min.js"></script>
 <script src="jira.js"></script>
-<script src="markdown.js"></script>
+<script src="render.js"></script>
+<script>
+  window.renderDocument = function (payload) {
+    document.getElementById("content").innerHTML = window.renderDocumentHTML(payload);
+    return true;
+  };
+</script>
 </head>
 <body>
 <article id="content" class="markdown-body"></article>

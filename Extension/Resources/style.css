@@ -54,12 +54,19 @@ body {
   opacity: 0.85;
 }
 
-/* Mermaid output: centered, no code-block chrome. */
-.markdown-body pre.mermaid {
-  display: flex;
-  justify-content: center;
-  background: transparent;
-  padding: 0;
+/* Mermaid fences: QuickLook's HTML view runs no scripts, so diagrams are
+ * shown as labeled source instead. */
+.markdown-body pre:has(> code.language-mermaid)::before {
+  content: "mermaid — diagram source";
+  display: block;
+  margin-bottom: 8px;
+  font: 500 11px -apple-system, sans-serif;
+  color: #59636e;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+@media (prefers-color-scheme: dark) {
+  .markdown-body pre:has(> code.language-mermaid)::before { color: #9198a1; }
 }
 
 @media print {
